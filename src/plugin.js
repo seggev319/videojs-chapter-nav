@@ -14,7 +14,7 @@ class ChapterNavButton extends Button {
 
     this.update()
 
-    let chaptersButton = this.player_.controlBar.chaptersButton
+    let chaptersButton = this.player_.getChild('controlBar').getChild('chaptersButton');
     this.on(chaptersButton, 'change', this.update)
     this.on('dispose', () => {
       this.off(chaptersButton, 'change', this.update)
@@ -24,7 +24,7 @@ class ChapterNavButton extends Button {
     return `vjs-chapter-nav-button jump-${this.options_.direction} ${super.buildCSSClass()}`
   }
   update() {
-    if (this.player_.controlBar.chaptersButton.hasClass('vjs-hidden')) {
+    if (this.player_.getChild('controlBar').getChild('chaptersButton').hasClass('vjs-hidden')) {
       this.hide()
     } else {
       this.show()
@@ -59,24 +59,25 @@ class ChapterNavButton extends Button {
 }
 
 const chapterNav = function(options) {
-  let player = this
+  let player = this;
+  let controlBar = player.getChild('controlBar');
   player.ready(() => {
     let opts = videojs.mergeOptions(defaults, options)
 
-    player.controlBar.chapterPrev = player.controlBar.addChild('ChapterNavButton', {
+    controlBar.chapterPrev = controlBar.addChild('ChapterNavButton', {
       direction: 'prev'
     })
-    player.controlBar.el().insertBefore(
-      player.controlBar.chapterPrev.el(),
-      player.controlBar.chaptersButton.el()
+    controlBar.el().insertBefore(
+      controlBar.chapterPrev.el(),
+      controlBar.chaptersButton.el()
     )
 
-    player.controlBar.chapterNext = player.controlBar.addChild('ChapterNavButton', {
+    controlBar.chapterNext = controlBar.addChild('ChapterNavButton', {
       direction: 'next'
     })
-    player.controlBar.el().insertBefore(
-      player.controlBar.chapterNext.el(),
-      player.controlBar.chaptersButton.el().nextSibling
+    controlBar.el().insertBefore(
+      controlBar.chapterNext.el(),
+      controlBar.chaptersButton.el().nextSibling
     )
   })
 }
